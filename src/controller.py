@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 import os
 import sys
-from Database.conexion_base_datos import *
+from models import *
 
 
 
@@ -20,9 +20,8 @@ def registro():
         usuario = request.form['usuario']
         contraseña = request.form['contraseña']
         email = request.form['email']
-        
+       
         # inserción en la base de datos
-        agregar_usuario(nombre,usuario,contraseña,email)
         
         return redirect(url_for('inicio_sesion'))  # Redirect to the login page
 
