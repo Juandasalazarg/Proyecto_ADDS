@@ -8,6 +8,7 @@ from models import *
 
 app = Flask(__name__)
 
+usuariox= Usuarios()
 
 @app.route('/')
 def inicio_sesion():
@@ -22,6 +23,7 @@ def registro():
         email = request.form['email']
        
         # inserción en la base de datos
+        usuariox.agregar_usuario(nombre,usuario,contraseña,email)
         
         return redirect(url_for('inicio_sesion'))  # Redirect to the login page
 
