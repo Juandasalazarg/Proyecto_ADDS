@@ -1,14 +1,10 @@
+# app.py
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 import os
 import sys
-from models import *
-
-
-
+from models import agregar_usuario, consultar_usuario, borrar_usuario, actualizar_usuario
 
 app = Flask(__name__)
-
-usuariox= Usuarios()
 
 @app.route('/')
 def inicio_sesion():
@@ -19,13 +15,13 @@ def registro():
     if request.method == 'POST':
         nombre = request.form['nombre']
         usuario = request.form['usuario']
-        contraseña = request.form['contraseña']
+        contrasena = request.form['contrasena']
         email = request.form['email']
        
         # inserción en la base de datos
-        usuariox.agregar_usuario(nombre,usuario,contraseña,email)
+        agregar_usuario(nombre, usuario, contrasena, email)
         
-        return redirect(url_for('inicio_sesion'))  # Redirect to the login page
+        return redirect(url_for('inicio_sesion'))  # Redirige a la página de inicio de sesión
 
     return render_template('registro.html')
 
@@ -33,12 +29,16 @@ def registro():
 def iniciar_sesion():
     if request.method == 'POST':
         usuario = request.form['usuario']
-        contraseña = request.form['contraseña']
+        contrasena = request.form['contrasena']
         
         # Simulación de autenticación en la base de datos
-        print("Usuario inició sesión:", usuario, contraseña,file=sys.stdout)
-        
-        return redirect(url_for('inicio_sesion'))  # Redirect to the login page
+        user_data = consultar_usuario(usuario)
+        if user_data and user_data[2] == contrasena:  # Supone que la contraseña está en el tercer índice
+            print("Usuario inició sesión:", usuario, contrasena, file=sys.stdout)
+            # Aquí podrías redirigir a otra página o realizar alguna acción adicional
+            return redirect(url_for('inicio_sesion'))  # Redirige a la página de inicio de sesión
+        else:
+            return "Usuario o contraseña incorrectos"  # Devuelve un mensaje de error
 
     return render_template('inicio_sesion.html')
 
